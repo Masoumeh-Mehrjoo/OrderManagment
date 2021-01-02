@@ -24,35 +24,34 @@ namespace OrderManagmentAPI.Service
         {
             try
             {
-                var Rep_Clients = _iclientRepository.AllRows();
-                var Clients = new List<ClientDto>();
+                var clients = _iclientRepository.AllRows();
 
-                var ClientsToReturn = _mapper.Map<IEnumerable<ClientDto>>(Rep_Clients);
-                return (ClientsToReturn);
+                var clientDto = _mapper.Map<IEnumerable<ClientDto>>(clients);
+
+                return (clientDto);
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
         public ClientDto FindById(int Id)
         {
-            var Rep_Client = _iclientRepository.findbyId(Id);
-            var ClientToReturn = _mapper.Map<ClientDto>(Rep_Client);
-            return (ClientToReturn);
+            var client = _iclientRepository.findbyId(Id);
+            var clientDto = _mapper.Map<ClientDto>(client);
+            return (clientDto);
         }
 
         public ClientDto InsertClient(ClientForCreationDto Client)
         {
             try
             {
-                var ClientRep = _mapper.Map<Model.Client>(Client);
-                _iclientRepository.Insert(ClientRep);
+                var client = _mapper.Map<Client>(Client);
+                _iclientRepository.Insert(client);
 
-                var ClientToReturn = _mapper.Map<ClientDto>(ClientRep);
-                return ClientToReturn;
+                var clientDto = _mapper.Map<ClientDto>(client);
+                return clientDto;
             }
             catch (Exception)
             {
@@ -62,9 +61,10 @@ namespace OrderManagmentAPI.Service
 
         public IEnumerable<ClientDto> SearchedRows(ClientResourceParameter ClientResourceParameter)
         {
-            var Rep_Client = _iclientRepository.SearchedRows(ClientResourceParameter);
-            var ClientToReturn = _mapper.Map<IEnumerable<ClientDto>>(Rep_Client);
-            return (ClientToReturn);
+            var clients = _iclientRepository.SearchedRows(ClientResourceParameter);
+            var clientDtos = _mapper.Map<IEnumerable<ClientDto>>(clients);
+
+            return (clientDtos);
         }
         public void DeleteClient(int Id)
         {
@@ -76,13 +76,13 @@ namespace OrderManagmentAPI.Service
         {
             try
             {
-                var Client = _iclientRepository.findbyId(Id);
+                var client = _iclientRepository.findbyId(Id);
 
-                var ClientTopatch = _mapper.Map<ClientForUpdateDto>(Client);
-                patchDocument.ApplyTo(ClientTopatch);
+                var clientForUpdateDto = _mapper.Map<ClientForUpdateDto>(client);
+                patchDocument.ApplyTo(clientForUpdateDto);
 
-                _mapper.Map(ClientTopatch, Client);
-                _iclientRepository.Edit(Client);
+                _mapper.Map(clientForUpdateDto, client);
+                _iclientRepository.Edit(client);
 
                 _iclientRepository.Save();
             }

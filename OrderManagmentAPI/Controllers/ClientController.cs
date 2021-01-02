@@ -18,12 +18,14 @@ namespace OrderManagmentAPI.Controllers
         readonly IClientService _clientService;
         public ClientController(IClientService clientService)
         {
-            _clientService = clientService;
+            _clientService = clientService ?? throw new ArgumentNullException(nameof(clientService));
         }
+
         [HttpPost]
         public ActionResult PostClient(ClientForCreationDto Client)
         {
             var ClientToReturn = _clientService.InsertClient(Client);
+
             return CreatedAtRoute("GetClientBYId", new { Id = ClientToReturn.id }, ClientToReturn);
 
         }
@@ -33,7 +35,7 @@ namespace OrderManagmentAPI.Controllers
             if (ClientResourceParameter == null && ClientResourceParameter.CRMId == 0)
             {
                 var AllClients = _clientService.AllRows();
-                return new JsonResult(AllClients);
+                return Ok(AllClients);
             }
             else
             {
@@ -47,8 +49,7 @@ namespace OrderManagmentAPI.Controllers
             var Client = _clientService.FindById(Id);
             if (Client == null)
             {
-                return NotFound("This Client Id is not exist in database.");
-
+                return NotFound("This Client Id does not exist.");
             }
 
             return Ok(Client);
@@ -59,7 +60,7 @@ namespace OrderManagmentAPI.Controllers
             var Client = _clientService.FindById(Id);
             if (Client == null)
             {
-                return NotFound("This Client Id is not exist in database.");
+                return NotFound("This Client Id does not exist.");
 
             }
             _clientService.DeleteClient(Id);
@@ -76,7 +77,7 @@ namespace OrderManagmentAPI.Controllers
             }
             catch (NotFoundException)
             {
-                return NotFound("Jason parameters are not Correct or this Client Id is not exist in database.");
+                return NotFound("Jason parameters are not Correct or this Client Id does not exist.");
             }
         }
 

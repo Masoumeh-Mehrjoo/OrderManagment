@@ -21,15 +21,15 @@ namespace OrderManagmentAPI.Service
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public ProductDto InsertProduct(ProductDtoForCreation product)
+        public ProductDto AddNewProduct(ProductDtoForCreation productDtoForCreation)
         {
             try
             {
-                var ProductRep = _mapper.Map<Model.Product>(product);
-                _iProductRepository.Insert(ProductRep);
+                var Product = _mapper.Map<Product>(productDtoForCreation);
+                _iProductRepository.Insert(Product);
 
-                var ProductToReturn = _mapper.Map<ProductDto>(ProductRep);
-                return ProductToReturn;
+                var productDto = _mapper.Map<ProductDto>(Product);
+                return productDto;
             }
             catch (Exception)
             {
@@ -37,15 +37,15 @@ namespace OrderManagmentAPI.Service
             }
         }
 
-        public IEnumerable<ProductDto> AllRows()
+        public IEnumerable<ProductDto> GetAll()
         {
             try
             {
-                var Rep_Products = _iProductRepository.AllRows();
-                var products = new List<ProductDto>();
+                var products = _iProductRepository.AllRows();
 
-                var ProductsToReturn = _mapper.Map<IEnumerable<ProductDto>>(Rep_Products);
-                return (ProductsToReturn);
+                var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
+
+                return (productDtos);
             }
             catch (Exception)
             {
@@ -56,17 +56,17 @@ namespace OrderManagmentAPI.Service
 
         public ProductDto FindById(int Id)
         {
-            var Rep_Product = _iProductRepository.findbyId(Id);
-            var ProductToReturn = _mapper.Map<ProductDto>(Rep_Product);
-            return (ProductToReturn);
+            var product = _iProductRepository.findbyId(Id);
+            var productDto = _mapper.Map<ProductDto>(product);
+            return (productDto);
 
         }
 
         public IEnumerable<ProductDto> SearchedRows(ProductResourceParameter productResourceParameter)
         {
-            var Rep_Product = _iProductRepository.SearchedRows(productResourceParameter);
-            var productToReturn = _mapper.Map<IEnumerable<ProductDto>>(Rep_Product);
-            return (productToReturn);
+            var products = _iProductRepository.SearchedRows(productResourceParameter);
+            var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
+            return (productDtos);
         }
     }
 }

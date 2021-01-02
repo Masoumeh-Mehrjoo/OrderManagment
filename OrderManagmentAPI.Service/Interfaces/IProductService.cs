@@ -8,9 +8,9 @@ namespace OrderManagmentAPI.Service.Interfaces
 {
     public interface IProductService
     {
-        public ProductDto  InsertProduct(ProductDtoForCreation product);
+        public ProductDto AddNewProduct(ProductDtoForCreation product);
 
-        public IEnumerable<ProductDto> AllRows();
+        public IEnumerable<ProductDto> GetAll();
 
         public ProductDto FindById(int Id);
 
