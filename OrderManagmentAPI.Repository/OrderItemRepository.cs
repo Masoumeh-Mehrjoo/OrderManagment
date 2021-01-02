@@ -27,7 +27,7 @@ namespace OrderManagmentAPI.Repository
 
         public void Edit(OrderItem entity)
         {
-          
+
             throw new NotImplementedException();
         }
 
@@ -39,11 +39,14 @@ namespace OrderManagmentAPI.Repository
         public void Insert(OrderItem entity)
         {
             _context.OrderItems.Add(entity);
+            _context.SaveChanges();
         }
 
-        public IEnumerable<OrderItem> InsertByOrderId(int OrderId,OrderItem entity)
+        public OrderItem InsertByOrderId(int OrderId, OrderItem entity)
         {
-            throw new NotImplementedException();
+            entity.OrderId = OrderId;
+            Insert(entity);
+            return (entity);
         }
 
         public bool Save()

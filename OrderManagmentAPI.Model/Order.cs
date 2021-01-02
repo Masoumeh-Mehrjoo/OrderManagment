@@ -22,7 +22,7 @@ namespace OrderManagmentAPI.Model
         {
         }
 
-        public float TotalPrice { get;  set; }
+        public float TotalPrice { get; private set; }
         public void SetTotalValue()
         {
             TotalPrice = OrderItems.Select(x => x.TotalPrice).Sum();
@@ -60,14 +60,14 @@ namespace OrderManagmentAPI.Model
         }
 
         public Client client { get; set; }
-        public int Count { get;  set; }
+        public int Count { get; private set; }
 
         public void SetCount()
         {
             Count = OrderItems.Select(x => x.Count).Sum();
         }
 
-        public float FinalPrice { get;  set; }
+        public float FinalPrice { get; private set; }
 
         public void SetFinalPrice()
         {

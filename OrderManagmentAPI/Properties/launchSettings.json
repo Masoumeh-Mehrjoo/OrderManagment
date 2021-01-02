@@ -17,8 +17,7 @@
       }
     },
     "OrderManagmentAPI": {
-      "commandName": "Project",
-      "launchBrowser": true,
+      "commandName": "IISExpress",
       "launchUrl": "weatherforecast",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

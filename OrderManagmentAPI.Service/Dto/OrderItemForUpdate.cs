@@ -4,7 +4,7 @@ using System.Text;
 
 namespace OrderManagmentAPI.Service.Dto
 {
-    class OrderItemForUpdate
+    public class OrderItemForUpdate
     {
     }
 }

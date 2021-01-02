@@ -88,9 +88,12 @@ namespace OrderManagmentAPI
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderItemService, OrderItemService>();
+
             services.AddScoped(provider => new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new OrderProfile(provider.GetService<IClientRepository>()));
