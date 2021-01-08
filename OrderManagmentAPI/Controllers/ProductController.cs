@@ -45,7 +45,6 @@ namespace OrderManagmentAPI.Controllers
             }
 
             return Ok(ProductDtos);
-
         }
 
         [HttpGet("{id}", Name = "GetProductBYId")]

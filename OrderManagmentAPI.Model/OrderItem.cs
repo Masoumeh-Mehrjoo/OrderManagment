@@ -9,36 +9,27 @@ namespace OrderManagmentAPI.Model
     {
         protected OrderItem()
         {
-        }
 
-        public OrderItem(int orderId,Product product, float soldPrice, int count)
+        }
+        public OrderItem(int orderId, int productId, float soldPrice, int count)
         {
             OrderId = orderId;
-            Product = product;
+            ProductId = productId;
             SoldPrice = soldPrice;
             Count = count;
             SetTotalPrice();
         }
 
         public int OrderId { get; set; }
-
         public int ProductId { get; set; }
         public Product Product { get; set; }
-
         public float SoldPrice { get; set; }
-
         public int Count { get; set; }
-
-        //public float TotalPrice { get { return SoldPrice * Count; }  set; }
-
         public float TotalPrice { get; private set; }
 
         public void SetTotalPrice()
         {
             TotalPrice = SoldPrice * Count;
         }
-
-
-
     }
 }

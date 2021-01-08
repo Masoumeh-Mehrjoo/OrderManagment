@@ -29,8 +29,7 @@ namespace OrderManagmentAPI.Service
             try
             {
                 var Rep_Orders = _OrderRepository.AllRows();
-                var Orders = new List<OrderDto>();
-
+             
                 var OrdersToReturn = _mapper.Map<IEnumerable<OrderDto>>(Rep_Orders);
                 return (OrdersToReturn);
             }

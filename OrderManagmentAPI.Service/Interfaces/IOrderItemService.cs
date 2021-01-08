@@ -10,15 +10,9 @@ namespace OrderManagmentAPI.Service.Interfaces
     public interface IOrderItemService
     {
         public OrderItemDto InsertOrderItem(int orderId, OrderItemForCreation OrderItem);
-
-        public IEnumerable<OrderItemDto> AllRows();
-
         public OrderItemDto FindById(int Id);
-
-        public IEnumerable<OrderItemDto> SearchedRows(OrderItemResourceParameter OrderItemResourceParameter);
-
         public void DeleteOrderItem(int Id);
-
-        public void EditOrderItem(int OrderItemId, JsonPatchDocument<OrderItemForUpdate> patchDocument);
+        public void EditOrderItem(int Id, JsonPatchDocument<OrderItemForUpdate> patchDocument);
+        public IEnumerable<OrderItemDto> OrderItemsOfOrder(int OrderId);
     }
 }

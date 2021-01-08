@@ -32,10 +32,10 @@ namespace OrderManagmentAPI.Repository
 
         public Product findbyId(int Id)
         {
-          //  if ((Id == 0) || (_context.Products.Find(Id) == null))
-          //  {
-         //       throw new ArgumentNullException(nameof(Id));
-          //  }
+            //  if ((Id == 0) || (_context.Products.Find(Id) == null))
+            //  {
+            //       throw new ArgumentNullException(nameof(Id));
+            //  }
 
             return _context.Products.Find(Id);
         }
@@ -45,7 +45,7 @@ namespace OrderManagmentAPI.Repository
             return _context.Products.ToList();
         }
 
-       
+
         public IEnumerable<Product> SearchedRows(ProductResourceParameter parameter)
         {
             string searchQuery = parameter.SearchQuery;
@@ -60,12 +60,13 @@ namespace OrderManagmentAPI.Repository
             if (!string.IsNullOrWhiteSpace(searchQuery))
             {
                 Products = Products.Where(a => a.Name.Contains(searchQuery) ||
+                a.Description.Contains(searchQuery) || (a.CurrentPrice.ToString() == searchQuery) ||
                 a.SKU.Contains(searchQuery)
                 );
             }
-         
+
             return Products.ToList();
-                       
+
         }
         public bool Save()
         {

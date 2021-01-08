@@ -6,5 +6,6 @@ namespace OrderManagmentAPI.Model.Repository
 {
     public interface IClientRepository:IRepository<Client,int,ClientResourceParameter>
     {
+        public List<Order> OrdersOfClient(int clientId);
     }
 }

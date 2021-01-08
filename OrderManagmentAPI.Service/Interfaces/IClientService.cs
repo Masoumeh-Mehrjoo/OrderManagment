@@ -20,6 +20,7 @@ namespace OrderManagmentAPI.Service.Interfaces
         public void DeleteClient(int Id);
 
         public void EditClient( int ClientId,JsonPatchDocument <ClientForUpdateDto>  patchDocument);
+        public IEnumerable<OrderDto> OrdersofClient(int ClientId);
     }
 }
  

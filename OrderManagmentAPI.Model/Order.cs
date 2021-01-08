@@ -7,13 +7,16 @@ namespace OrderManagmentAPI.Model
 {
     public class Order : EntityBase<int>
     {
+
         public Order(DateTime issueDate, IEnumerable<OrderItem> orderItems, Client client)
         {
             IssueDate = issueDate;
             OrderItems = orderItems;
             this.client = client;
-            SetCount();
-            SetTotalValue();
+            var status = "NewOrder";
+            SetCount(status, 0);
+
+            SetTotalValue(status, 0);
             Tax = (float)(TotalPrice * 0.03);
             SetFinalPrice();
         }
@@ -21,54 +24,94 @@ namespace OrderManagmentAPI.Model
         protected Order()
         {
         }
-
         public float TotalPrice { get; private set; }
-        public void SetTotalValue()
+        public void SetTotalValue(string status, float OrderItemTotalPrice)
         {
-            TotalPrice = OrderItems.Select(x => x.TotalPrice).Sum();
+            if (status == "Delete")
+            {
+                TotalPrice = this.TotalPrice - OrderItemTotalPrice;
+            }
+            if (status == "Add")
+            {
+                TotalPrice = this.TotalPrice + OrderItemTotalPrice;
+            }
+            else
+                if (status == "CreateOrder")
+            {
+                TotalPrice = OrderItems.Select(x => x.TotalPrice).Sum();
+            }
         }
-
         public DateTime IssueDate { get; set; }
         public float Tax { get; private set; }
-        public IEnumerable<OrderItem> OrderItems { get;  set; }
-
-        public Order AddOrderItem(OrderItem newOrderItem)
+        public Client client { get; set; }
+        public int Count { get; private set; }
+        public IEnumerable<OrderItem> OrderItems { get; set; }
+        public Order AddOrderItemInCreationOrder(OrderItem newOrderItem)
         {
+
             List<OrderItem> orderItems = this.OrderItems.ToList();
             orderItems.Add(newOrderItem);
-            SetCount();
-            SetTotalValue();
+            var status = "CreateOrder";
+            SetCount(status, newOrderItem.Count);
+
+            SetTotalValue(status, newOrderItem.TotalPrice);
             Tax = (float)(TotalPrice * 0.03);
             newOrderItem.OrderId = id;
             SetFinalPrice();
             return (this);
         }
-        public Order EditOrderItem(OrderItem EditorderItem)
+        public Order AddNewOrderItem(OrderItem newOrderItem)
         {
-            List<OrderItem> orderItems = this.OrderItems.ToList();
-            orderItems.Add(EditorderItem);
+            var status = "Add";
+            SetCount(status, newOrderItem.Count);
 
-            SetCount();
-            SetTotalValue();
-
+            SetTotalValue(status, newOrderItem.TotalPrice);
             Tax = (float)(TotalPrice * 0.03);
-            EditorderItem.OrderId = id;
 
             SetFinalPrice();
             return (this);
 
         }
-
-        public Client client { get; set; }
-        public int Count { get; private set; }
-
-        public void SetCount()
+        public Order DeleteOrderItem(OrderItem DeletedOrderItem)
         {
-            Count = OrderItems.Select(x => x.Count).Sum();
+            var status = "Delete";
+            SetCount(status, DeletedOrderItem.Count);
+            SetTotalValue(status, DeletedOrderItem.TotalPrice);
+            Tax = (float)(TotalPrice * 0.03);
+            SetFinalPrice();
+            return (this);
+
         }
+        public Order EditOrderItem(OrderItem OldOrderItem, OrderItem NewOrderItem)
+        {
 
+            Count = (this.Count - OldOrderItem.Count) + NewOrderItem.Count;
+
+            TotalPrice = (this.TotalPrice - OldOrderItem.TotalPrice) - NewOrderItem.TotalPrice;
+            Tax = (float)(TotalPrice * 0.03);
+
+            SetFinalPrice();
+            return (this);
+
+        }
+        public void SetCount(string status, int orderItemCount)
+        {
+            if (status == "Delete")
+            {
+                Count = this.Count - orderItemCount;
+            }
+            else
+                if (status == "Add")
+            {
+                Count = this.Count + orderItemCount;
+            }
+            else
+                if (status == "CreateOrder")
+            {
+                Count = OrderItems.Select(x => x.Count).Sum();
+            }
+        }
         public float FinalPrice { get; private set; }
-
         public void SetFinalPrice()
         {
             FinalPrice = TotalPrice + Tax;

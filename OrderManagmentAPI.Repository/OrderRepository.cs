@@ -28,14 +28,18 @@ namespace OrderManagmentAPI.Repository
             throw new NotImplementedException();
         }
 
-        public void Edit(Order entity)
+        public void DeleteOrderItem(Order entity, OrderItem orderItem)
         {
-            foreach (var orderitem in entity.OrderItems)
-            {
-                entity = entity.EditOrderItem(orderitem);
+            entity = entity.DeleteOrderItem(orderItem);
+            _context.Orders.Update(entity);
+            _context.SaveChanges();
+        }
 
-                _orderItemRepository.Edit(orderitem);
-            }
+        public void AddNewOrderItem(Order entity, OrderItem orderItem)
+        {
+            entity = entity.AddNewOrderItem(orderItem);
+
+            _context.Orders.Update(entity);
             _context.SaveChanges();
 
         }
@@ -48,17 +52,12 @@ namespace OrderManagmentAPI.Repository
         public void Insert(Order entity)
         {
             foreach (var orderitem in entity.OrderItems)
-            {
-                entity = entity.AddOrderItem(orderitem);
+                entity = entity.AddOrderItemInCreationOrder(orderitem);
 
-                _orderItemRepository.Insert(orderitem);
-            }
             _context.Orders.Add(entity);
             _context.SaveChanges();
 
         }
-
-
 
         public void InsertOrderWithOrderItem(Order order)
         {
@@ -67,12 +66,26 @@ namespace OrderManagmentAPI.Repository
 
         public bool Save()
         {
-            throw new NotImplementedException();
+            return (_context.SaveChanges() >= 0);
         }
 
         public IEnumerable<Order> SearchedRows(OrderResourceParameter parameter)
         {
             throw new NotImplementedException();
+        }
+
+        public void Edit(Order entity)
+        {
+            
+        }
+
+        public void EditOrderItem(Order entity, OrderItem OldOrderItem, OrderItem NewOrderItem)
+        {
+            entity = entity.EditOrderItem(OldOrderItem, NewOrderItem);
+
+            _context.Orders.Update(entity);
+            _context.SaveChanges();
+
         }
     }
 }

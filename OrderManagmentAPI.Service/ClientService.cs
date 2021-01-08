@@ -91,5 +91,13 @@ namespace OrderManagmentAPI.Service
                 throw new NotFoundException();
             }
         }
+
+        public IEnumerable<OrderDto> OrdersofClient(int clientId)
+        {
+            var Orders = _iclientRepository.OrdersOfClient(clientId);
+
+            var ListOfOrders =_mapper.Map<IEnumerable<OrderDto>>(Orders);
+            return (ListOfOrders);
+        }
     }
 }

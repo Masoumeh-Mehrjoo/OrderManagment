@@ -30,17 +30,27 @@ namespace OrderManagmentAPI.Service.Profiles
 
             /**************OrderItem******/
             CreateMap<OrderItem, OrderItemDto>();
+            CreateMap<OrderItemDto, OrderItem>();
+
             CreateMap<OrderItemForCreation, OrderItem>();
+
+            CreateMap<OrderItem, OrderItemForUpdate>();
+            CreateMap<OrderItemForUpdate,OrderItem >();
+
+
+
 
             _clientRepository = clientRepository;
             CreateMap<OrderDto, Order>();
             CreateMap<Order, OrderDto>();
 
-            CreateMap<OrderForCreationDto, Order>().ForMember(dest => dest.client, act => act.MapFrom(src => _clientRepository.findbyId(src.clientId)));
+            CreateMap<OrderForCreationDto, Order>().ForMember(dest => dest.client, act =>
+            act.MapFrom(src => _clientRepository.findbyId(src.clientId)));
 
             CreateMap<Order, OrderForUpdateDto>();
 
-            CreateMap<OrderForUpdateDto, Order>();
+            CreateMap<OrderForUpdateDto, Order>().ForMember(dest => dest.client, act =>
+            act.MapFrom(src => _clientRepository.findbyId(src.ClientId)));
 
 
 

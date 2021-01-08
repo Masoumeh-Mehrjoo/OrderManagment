@@ -10,7 +10,7 @@ namespace OrderManagmentAPI.Service.Dto
         public DateTime IssueDate { get; set; }
         public int clientId { get; set; }
 
-        public List<OrderItem> OrderItems { get; set; }
+        public IEnumerable<OrderItem> OrderItems { get; set; }
 
     }
 }

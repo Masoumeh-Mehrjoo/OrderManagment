@@ -43,6 +43,7 @@ namespace OrderManagmentAPI.Controllers
                 return Ok(AllClients);
             }
         }
+
         [HttpGet("{id}", Name = "GetClientBYId")]
         public ActionResult GetClientBYId(int Id)
         {
@@ -54,6 +55,15 @@ namespace OrderManagmentAPI.Controllers
 
             return Ok(Client);
         }
+
+        [HttpGet]
+        [Route("OrdersOfClient/{ClientId}")]
+        public ActionResult OrdersOfClient(int ClientId)
+        {
+            var orders = _clientService.OrdersofClient(ClientId);
+            return Ok(orders);
+        }
+
         [HttpDelete("{id}")]
         public ActionResult DeleteClient(int Id)
         {

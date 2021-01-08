@@ -1,4 +1,5 @@
-﻿using OrderManagmentAPI.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using OrderManagmentAPI.Model;
 using OrderManagmentAPI.Model.Repository;
 using System;
 using System.Collections.Generic;
@@ -7,12 +8,13 @@ using System.Text;
 
 namespace OrderManagmentAPI.Repository
 {
+
     public class ClientRepository : IClientRepository
     {
         private OrderContext _context;
         public ClientRepository(OrderContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
         public IEnumerable<Client> AllRows()
         {
@@ -69,6 +71,12 @@ namespace OrderManagmentAPI.Repository
         public bool Save()
         {
             return (_context.SaveChanges() >= 0);
+        }
+
+        public List<Order> OrdersOfClient(int clientId)
+        {
+            var orders = _context.Orders.Where(c => c.client.id == clientId).ToList();
+            return (orders);
         }
     }
 }

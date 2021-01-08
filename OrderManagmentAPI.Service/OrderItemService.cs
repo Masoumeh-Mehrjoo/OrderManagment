@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.JsonPatch;
 using OrderManagmentAPI.Model;
 using OrderManagmentAPI.Model.Repository;
+using OrderManagmentAPI.Repository;
 using OrderManagmentAPI.Service.Dto;
 using OrderManagmentAPI.Service.Interfaces;
 using System;
@@ -15,45 +16,64 @@ namespace OrderManagmentAPI.Service
     {
         private readonly IMapper _mapper;
         IOrderItemRepository _orderItemRepository;
-        public OrderItemService(IOrderItemRepository orderItemRepository,IMapper mapper  )
+        public OrderItemService(IOrderItemRepository orderItemRepository, IMapper mapper)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _orderItemRepository = orderItemRepository ?? throw new ArgumentNullException(nameof(orderItemRepository));
-
         }
-        public IEnumerable<OrderItemDto> AllRows()
-        {
-            throw new NotImplementedException();
-        }
-
         public void DeleteOrderItem(int Id)
         {
-            throw new NotImplementedException();
+            _orderItemRepository.Delete(Id);
         }
-
-        public void EditOrderItem(int OrderItemId, JsonPatchDocument<OrderItemForUpdate> patchDocument)
+        public void EditOrderItem(int Id, JsonPatchDocument<OrderItemForUpdate> patchDocument)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                var OrderItem = _orderItemRepository.findbyId(Id);
 
+                var OrderItemForUpdateDto = _mapper.Map<OrderItemForUpdate>(OrderItem);
+                patchDocument.ApplyTo(OrderItemForUpdateDto);
+
+                _mapper.Map(OrderItemForUpdateDto, OrderItem);
+                _orderItemRepository.Edit(OrderItem);
+
+                _orderItemRepository.Save();
+            }
+            catch (Exception)
+            {
+                throw new NotFoundException();
+            }
+        }
         public OrderItemDto FindById(int Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var orderItem = _orderItemRepository.findbyId(Id);
+                var OrderItemDto = _mapper.Map<OrderItemDto>(orderItem);
+                return (OrderItemDto);
+            }
+            catch (Exception)
+            {
+                throw new NotFoundException();
+            }
         }
-
-        public OrderItemDto InsertOrderItem(int orderId,OrderItemForCreation OrderItem)
+        public OrderItemDto InsertOrderItem(int orderId, OrderItemForCreation OrderItem)
         {
-            var RepOrderItem = _mapper.Map<OrderItem>(OrderItem);
-            _orderItemRepository.InsertByOrderId(orderId,RepOrderItem);
+            var orderItem = _mapper.Map<OrderItem>(OrderItem);
+            _orderItemRepository.InsertByOrderId(orderId, orderItem);
 
-            var OrderItemToReturn = _mapper.Map<OrderItemDto>(RepOrderItem);
-            return OrderItemToReturn;
+            var OrderItemDto = _mapper.Map<OrderItemDto>(orderItem);
+            return OrderItemDto;
 
         }
-
-        public IEnumerable<OrderItemDto> SearchedRows(OrderItemResourceParameter OrderItemResourceParameter)
+        public IEnumerable<OrderItemDto> OrderItemsOfOrder(int OrderId)
         {
-            throw new NotImplementedException();
+            var orderItems = _orderItemRepository.FindOrderItemsofOrderId(OrderId);
+            var OrderItemsDto = _mapper.Map<IEnumerable<OrderItemDto>>(orderItems);
+
+            return (OrderItemsDto);
+
         }
+
     }
 }
