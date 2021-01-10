@@ -97,7 +97,9 @@ namespace OrderManagmentAPI
             services.AddScoped(provider => new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new OrderProfile(provider.GetService<IClientRepository>()));
-            }).CreateMapper());     
+            }).CreateMapper());
+
+            services.AddSwaggerGen();
 
         }
 
@@ -119,6 +121,19 @@ namespace OrderManagmentAPI
                     });
                 });
             }
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger(c =>
+            {
+                c.SerializeAsV2 = true;
+            });
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = string.Empty;
+            });
+
             app.UseRouting();
 
             //app.UseAuthorization();

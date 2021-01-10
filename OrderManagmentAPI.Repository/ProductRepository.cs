@@ -31,12 +31,7 @@ namespace OrderManagmentAPI.Repository
         }
 
         public Product findbyId(int Id)
-        {
-            //  if ((Id == 0) || (_context.Products.Find(Id) == null))
-            //  {
-            //       throw new ArgumentNullException(nameof(Id));
-            //  }
-
+        {            
             return _context.Products.Find(Id);
         }
 

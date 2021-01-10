@@ -18,7 +18,7 @@ namespace OrderManagmentAPI.Controllers
     {
         readonly IOrderService _orderService;
         readonly IClientService _clientService;
-        IOrderItemService _OrderItemService;
+        readonly IOrderItemService _OrderItemService;
 
         public OrderController(IOrderService orderService, IClientService clientService, IOrderItemService orderItemService)
         {
@@ -29,13 +29,20 @@ namespace OrderManagmentAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<OrderDto>> GetOrders([FromQuery] OrderResourceParameter orderResourceParameters)
+        public ActionResult<IEnumerable<OrderDto>> GetOrders()
         {
 
             var AllOrders = _orderService.AllRows();
-            return new JsonResult(AllOrders);
+
+            if (AllOrders.Any())
+            {
+                return Ok(AllOrders); 
+            }
+
+            return NotFound();
 
         }
+
         [HttpGet("{id}", Name = "GetOrderById")]
         public ActionResult GetOrderById(int Id)
         {
@@ -59,7 +66,7 @@ namespace OrderManagmentAPI.Controllers
         public ActionResult<OrderDto> PostOrder(OrderForCreationDto orderForCreationDto)
         {
             if (_clientService.FindById(orderForCreationDto.clientId) == null)
-                return NotFound("This ClientId doesnt exist.");
+                return BadRequest("This ClientId doesnt exist.");
 
             var OrderToReturn = _orderService.InsertOrder(orderForCreationDto);
             return CreatedAtRoute("GetOrderById", new { Id = OrderToReturn.id }, OrderToReturn);
